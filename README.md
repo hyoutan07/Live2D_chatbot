@@ -1,1 +1,2 @@
 # Live2D_chatbot
+Live2Dを利用したチャットボットウェブアプリです．
