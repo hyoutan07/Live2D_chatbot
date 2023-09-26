@@ -1,0 +1,86 @@
+version: '3'
+
+services:
+  # https-portal:
+  #   image: steveltn/https-portal:1
+  #   ports:
+  #     - '80:80'
+  #     - '443:443'
+  #   environment:
+  #     DOMAINS:  'localhost -> http://web:8000'
+  #     STAGE: 'local'
+
+  app:
+    build:
+      context: ./docker/app
+      dockerfile: Dockerfile
+      args:
+        USER_ID: ${UID}
+        USER_NAME: ${USER}
+        GROUP_ID: ${GID}
+        GROUP_NAME: ${GROUP}
+    container_name: vr_voice_chat_app
+    working_dir: '/root/app'
+    tty: true
+    #user: "${UID}:${GID}"
+    ports: 
+     - "8080:8000"
+    volumes:
+      - ./vr_voice_chat:/root/app
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+    environment:
+      - .env
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [ gpu ]
+  
+  # web:
+  #   build:
+  #     context: ./docker/web
+  #     dockerfile: Dockerfile
+  #   container_name: vr_voice_chat_web
+  #   ports:
+  #     - '127.0.0.1:8000:8000'
+  #   depends_on:
+  #     - app
+  #   volumes:
+  #     - ./vr_voice_chat/:/app
+
+#   db:
+#     container_name: db
+#     build:
+#       context: .
+#       dockerfile: ./docker/db/Dockerfile
+#     ports:
+#       - '127.0.0.1:3306:3306'
+#     expose:
+#       - '3306'
+#     environment:
+#       MYSQL_DATABASE: with411
+#       MYSQL_USER: with411
+#       MYSQL_PASSWORD: V2lUaDQxMSE/
+#       MYSQL_ROOT_PASSWORD: V2lUaDQxMSE/
+#       TZ: 'Asia/Tokyo'
+#     volumes:
+#       - mysql-volume:/var/lib/mysql
+  
+#   phpmyadmin:
+#     image: phpmyadmin/phpmyadmin
+#     depends_on:
+#       - db
+#     environment:
+#       - PMA_ARBITRARY=1
+#       - PMA_HOSTS=db
+#       - PMA_USER=with411
+#       - PMA_PASSWORD=V2lUaDQxMSE/
+#     ports:
+#       - "127.0.0.1:8081:80"
+#     volumes:
+#       - mysql-volume:/var/lib/mysql
+
+# volumes:
+#   mysql-volume:

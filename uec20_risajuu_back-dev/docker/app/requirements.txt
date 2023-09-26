@@ -1,0 +1,14 @@
+python-dotenv
+numpy
+openai
+langchain
+transformers
+datasets
+SpeechRecognition
+gtts
+#pyaudio
+gradio
+google-search-results
+fastapi
+uvicorn[standard]
+japanize-matplotlib
